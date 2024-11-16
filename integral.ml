@@ -39,19 +39,19 @@ let area xb yb =
 (* --------------------- *)
 
 let integral f a b tol = 
-  let trap f a b = 
+  let simp f a b = 
     (b -. a) /. 6. *. (f a +. 4.*.f ((a+.b)/.2.) +. f b)
   in 
   let rec aux f a m b curr tol =
-    let left = trap f a m in
-    let right = trap f m b in
+    let left = simp f a m in
+    let right = simp f m b in
     if abs_float (left +. right -. curr) < tol
       then left +. right
       else aux f a ((m +. a) /. 2.) m left (0.5*.tol)
         +. aux f m ((b +. m) /. 2.) b right (0.5*.tol)
   in
   let m = (b -. a) /. 2. in
-  let curr = trap f a b in
+  let curr = simp f a b in
   aux f a m b curr tol;;
 
 let partial x = integral (area x) (-1.*.x) 0.0 1.0e-10;;
